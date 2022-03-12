@@ -84,10 +84,26 @@ var createTaskActions = function(taskId) {
 }
 var taskButtonHandler = function(event){
 
-    if (event.target.matches(".delete-btn")) {
-        var taskId = event.target.getAttribute("data-task-id")
-        deleteTask(taskId)
+    var targetEl = event.target
+
+    if (targetEl.matches(".edit-btn")) {
+        var taskId = targetEl.getAttribute("data-task-id");
+        editTask(taskId)
+    } else if (targetEl.matches(".delete-btn")) {
+        var taskId = targetEl.getAttribute("data-task-id");
+        deleteTask(taskId);
     }
+}
+var editTask = function(taskId) {
+    console.log("editing task #" + taskId)
+
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    var taskName = taskSelected.querySelector("h3.task-name").textContent
+    console.log(taskName)
+
+    var taskType = taskSelected.querySelector("span.task-type").textContent
+    console.log(taskType)
 }
 var deleteTask = function(taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "'")
