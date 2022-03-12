@@ -17,12 +17,32 @@ var taskFormHandler = function(event) {
 
     formEL.reset()
 
-    var taskDataObj = {
-        name: taskNameInput,
-        type: taskTypeInput
-    };
-    createTaskEl(taskDataObj)
+    var isEdit = formEL.hasAttribute("data-task-id");
+
+    if (isEdit) {
+        var taskId = formEL.getAttribute("data-task-id")
+        completeEditTask(taskNameInput, taskTypeInput, taskId);
+    }
+    else {
+        var taskDataObj = {
+            name: taskNameInput,
+            type: taskTypeInput
+        };
+        createTaskEl(taskDataObj)
+    }
 };
+
+var completeEditTask = function(taskName, taskType, taskId) {
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']")
+
+    taskSelected.querySelector("h3.task-name").textContent = taskName
+    taskSelected.querySelector("span.task-type").textContent = taskType
+
+    alert("Task Updated!")
+
+    formEL.removeAttribute("data-task-id")
+    document.querySelector("#save-task").textContent = "Add Task"
+}
 
 var createTaskEl = function(taskDataObj) {
     var listItemEl = document.createElement("li");
@@ -100,10 +120,14 @@ var editTask = function(taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
 
     var taskName = taskSelected.querySelector("h3.task-name").textContent
-    console.log(taskName)
-
     var taskType = taskSelected.querySelector("span.task-type").textContent
-    console.log(taskType)
+
+    document.querySelector("input[name='task-name']").value = taskName
+    document.querySelector("select[name='task-type']").value = taskType
+    document.querySelector("#save-task").textContent= "Save Task"
+
+    formEL.setAttribute("data-task-id", taskId)
+    
 }
 var deleteTask = function(taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "'")
